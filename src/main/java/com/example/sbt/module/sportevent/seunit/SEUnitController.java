@@ -1,11 +1,11 @@
-package com.example.sbt.module.sportevent.selocation;
+package com.example.sbt.module.sportevent.seunit;
 
 import com.example.sbt.common.constant.PermissionCode;
 import com.example.sbt.common.dto.CommonResponse;
 import com.example.sbt.common.dto.PaginationData;
 import com.example.sbt.common.util.ExceptionUtils;
-import com.example.sbt.module.sportevent.selocation.dto.SELocationDTO;
-import com.example.sbt.module.sportevent.selocation.dto.SearchSELocationRequestDTO;
+import com.example.sbt.module.sportevent.seunit.dto.SEUnitDTO;
+import com.example.sbt.module.sportevent.seunit.dto.SearchSEUnitRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,15 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v1/se/locations")
-public class SELocationController {
+@RequestMapping("/v1/se/units")
+public class SEUnitController {
 
-    private final SELocationService seLocationService;
+    private final SEUnitService seUnitService;
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<CommonResponse<SELocationDTO>> findOneByCode(@PathVariable String code) {
+    public ResponseEntity<CommonResponse<SEUnitDTO>> findOneByCode(@PathVariable String code) {
         try {
-            var result = seLocationService.findOneByCodeOrThrow(code);
+            var result = seUnitService.findOneByCodeOrThrow(code);
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -34,9 +34,9 @@ public class SELocationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommonResponse<SELocationDTO>> findOneById(@PathVariable UUID id) {
+    public ResponseEntity<CommonResponse<SEUnitDTO>> findOneById(@PathVariable UUID id) {
         try {
-            var result = seLocationService.findOneByIdOrThrow(id);
+            var result = seUnitService.findOneByIdOrThrow(id);
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -45,9 +45,9 @@ public class SELocationController {
 
     @PutMapping
     @Secured({PermissionCode.SYSTEM_ADMIN})
-    public ResponseEntity<CommonResponse<SELocationDTO>> save(@RequestBody SELocationDTO requestDTO) {
+    public ResponseEntity<CommonResponse<SEUnitDTO>> save(@RequestBody SEUnitDTO requestDTO) {
         try {
-            var result = seLocationService.save(requestDTO);
+            var result = seUnitService.save(requestDTO);
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);
@@ -55,7 +55,7 @@ public class SELocationController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<CommonResponse<PaginationData<SELocationDTO>>> search(
+    public ResponseEntity<CommonResponse<PaginationData<SEUnitDTO>>> search(
             @RequestParam(required = false) Long pageNumber,
             @RequestParam(required = false) Long pageSize,
             @RequestParam(required = false) UUID seasonId,
@@ -64,7 +64,7 @@ public class SELocationController {
             @RequestParam(required = false) Instant createdAtTo,
             @RequestParam(required = false, defaultValue = "false") Boolean count) {
         try {
-            var requestDTO = SearchSELocationRequestDTO.builder()
+            var requestDTO = SearchSEUnitRequestDTO.builder()
                     .pageNumber(pageNumber)
                     .pageSize(pageSize)
                     .seasonId(seasonId)
@@ -72,7 +72,7 @@ public class SELocationController {
                     .createdAtTo(createdAtTo)
                     .createdAtFrom(createdAtFrom)
                     .build();
-            var result = seLocationService.search(requestDTO, count);
+            var result = seUnitService.search(requestDTO, count);
             return ResponseEntity.ok(new CommonResponse<>(result));
         } catch (Exception e) {
             return ExceptionUtils.toResponseEntity(e);

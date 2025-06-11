@@ -1,4 +1,4 @@
-package com.example.sbt.module.sportevent.selocation;
+package com.example.sbt.module.sportevent.seunit;
 
 import com.example.sbt.common.constant.ResultSetName;
 import com.example.sbt.common.dto.PaginationData;
@@ -6,9 +6,9 @@ import com.example.sbt.common.exception.CustomException;
 import com.example.sbt.common.mapper.CommonMapper;
 import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.SQLHelper;
-import com.example.sbt.module.sportevent.selocation.dto.SELocationDTO;
-import com.example.sbt.module.sportevent.selocation.dto.SearchSELocationRequestDTO;
 import com.example.sbt.module.sportevent.seseason.SESeasonRepository;
+import com.example.sbt.module.sportevent.seunit.dto.SEUnitDTO;
+import com.example.sbt.module.sportevent.seunit.dto.SearchSEUnitRequestDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -28,55 +28,54 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 @Transactional(rollbackOn = Exception.class)
-public class SELocationServiceImpl implements SELocationService {
+public class SEUnitServiceImpl implements SEUnitService {
 
     private final CommonMapper commonMapper;
-    private final SELocationRepository seLocationRepository;
+    private final SEUnitRepository seUnitRepository;
     private final SESeasonRepository seSeasonRepository;
-    private final SELocationValidator seLocationValidator;
+    private final SEUnitValidator seUnitValidator;
     private final EntityManager entityManager;
 
     @Override
-    public SELocationDTO save(SELocationDTO requestDTO) {
+    public SEUnitDTO save(SEUnitDTO requestDTO) {
         if (requestDTO == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
-        SELocation result = null;
+        SEUnit result = null;
         if (requestDTO.getId() != null) {
-            result = seLocationRepository.findById(requestDTO.getId()).orElse(null);
+            result = seUnitRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
             requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
-            seLocationValidator.validateCreate(requestDTO);
-            if (seLocationRepository.existsByCode(requestDTO.getCode())) {
+            seUnitValidator.validateCreate(requestDTO);
+            if (seUnitRepository.existsByCode(requestDTO.getCode())) {
                 throw new CustomException(HttpStatus.BAD_REQUEST);
             }
             if (!seSeasonRepository.existsById(requestDTO.getSeasonId())) {
                 throw new CustomException(HttpStatus.BAD_REQUEST);
             }
-            result = new SELocation();
+            result = new SEUnit();
             result.setCode(requestDTO.getCode());
             result.setSeasonId(requestDTO.getSeasonId());
         } else {
-            seLocationValidator.validateUpdate(requestDTO);
+            seUnitValidator.validateUpdate(requestDTO);
         }
         result.setName(requestDTO.getName());
-        result.setAddress(requestDTO.getAddress());
-        result = seLocationRepository.save(result);
+        result = seUnitRepository.save(result);
         return commonMapper.toDTO(result);
     }
 
     @Override
-    public SELocationDTO findOneById(UUID id) {
+    public SEUnitDTO findOneById(UUID id) {
         if (id == null) return null;
-        List<SELocationDTO> result = executeSearch(SearchSELocationRequestDTO.builder().id(id).build(), false).getItems();
+        List<SEUnitDTO> result = executeSearch(SearchSEUnitRequestDTO.builder().id(id).build(), false).getItems();
         if (CollectionUtils.isEmpty(result)) return null;
         return result.getFirst();
     }
 
     @Override
-    public SELocationDTO findOneByIdOrThrow(UUID id) {
-        SELocationDTO result = findOneById(id);
+    public SEUnitDTO findOneByIdOrThrow(UUID id) {
+        SEUnitDTO result = findOneById(id);
         if (result == null) {
             throw new CustomException(HttpStatus.NOT_FOUND);
         }
@@ -84,16 +83,16 @@ public class SELocationServiceImpl implements SELocationService {
     }
 
     @Override
-    public SELocationDTO findOneByCode(String code) {
+    public SEUnitDTO findOneByCode(String code) {
         if (code == null) return null;
-        List<SELocationDTO> result = executeSearch(SearchSELocationRequestDTO.builder().code(code).build(), false).getItems();
+        List<SEUnitDTO> result = executeSearch(SearchSEUnitRequestDTO.builder().code(code).build(), false).getItems();
         if (CollectionUtils.isEmpty(result)) return null;
         return result.getFirst();
     }
 
     @Override
-    public SELocationDTO findOneByCodeOrThrow(String code) {
-        SELocationDTO result = findOneByCode(code);
+    public SEUnitDTO findOneByCodeOrThrow(String code) {
+        SEUnitDTO result = findOneByCode(code);
         if (result == null) {
             throw new CustomException(HttpStatus.NOT_FOUND);
         }
@@ -101,44 +100,44 @@ public class SELocationServiceImpl implements SELocationService {
     }
 
     @Override
-    public PaginationData<SELocationDTO> search(SearchSELocationRequestDTO requestDTO, boolean isCount) {
-        PaginationData<SELocationDTO> result = executeSearch(requestDTO, true);
+    public PaginationData<SEUnitDTO> search(SearchSEUnitRequestDTO requestDTO, boolean isCount) {
+        PaginationData<SEUnitDTO> result = executeSearch(requestDTO, true);
         if (!isCount && result.getTotalItems() > 0) {
             result.setItems(executeSearch(requestDTO, false).getItems());
         }
         return result;
     }
 
-    private PaginationData<SELocationDTO> executeSearch(SearchSELocationRequestDTO requestDTO, boolean isCount) {
-        PaginationData<SELocationDTO> result = SQLHelper.initData(requestDTO.getPageNumber(), requestDTO.getPageSize());
+    private PaginationData<SEUnitDTO> executeSearch(SearchSEUnitRequestDTO requestDTO, boolean isCount) {
+        PaginationData<SEUnitDTO> result = SQLHelper.initData(requestDTO.getPageNumber(), requestDTO.getPageSize());
         Map<String, Object> params = new HashMap<>();
         StringBuilder builder = new StringBuilder();
         if (isCount) {
             builder.append(" select count(*) ");
         } else {
-            builder.append(" select l.id, l.season_id, s.code as season_code, l.code, l.name, l.address, l.created_at, l.updated_at ");
+            builder.append(" select u.id, u.season_id, s.code as season_code, u.code, u.name, u.created_at, u.updated_at ");
         }
-        builder.append(" from se_location l ");
-        builder.append(" left join se_season s on (l.season_id = s.id) ");
+        builder.append(" from se_unit u ");
+        builder.append(" left join se_season s on (u.season_id = s.id) ");
         builder.append(" where 1=1 ");
         if (requestDTO.getSeasonId() != null) {
-            builder.append(" and l.season_id = :seasonId ");
+            builder.append(" and u.season_id = :seasonId ");
             params.put("seasonId", requestDTO.getSeasonId());
         }
         if (StringUtils.isNotEmpty(requestDTO.getCode())) {
-            builder.append(" and l.code = :code ");
+            builder.append(" and u.code = :code ");
             params.put("code", requestDTO.getCode());
         }
         if (requestDTO.getCreatedAtFrom() != null) {
-            builder.append(" and l.created_at >= :createdAtFrom ");
+            builder.append(" and u.created_at >= :createdAtFrom ");
             params.put("createdAtFrom", requestDTO.getCreatedAtFrom().truncatedTo(SQLHelper.MIN_TIME_PRECISION));
         }
         if (requestDTO.getCreatedAtTo() != null) {
-            builder.append(" and l.created_at <= :createdAtTo ");
+            builder.append(" and u.created_at <= :createdAtTo ");
             params.put("createdAtTo", requestDTO.getCreatedAtTo().truncatedTo(SQLHelper.MIN_TIME_PRECISION));
         }
         if (!isCount) {
-            builder.append(" order by l.code asc, l.id asc ");
+            builder.append(" order by u.code asc, u.id asc ");
             builder.append(SQLHelper.toLimitOffset(result.getPageNumber(), result.getPageSize()));
         }
         if (isCount) {
@@ -148,9 +147,9 @@ public class SELocationServiceImpl implements SELocationService {
             result.setTotalItems(count);
             result.setTotalPages(SQLHelper.toPages(count, result.getPageSize()));
         } else {
-            Query query = entityManager.createNativeQuery(builder.toString(), ResultSetName.SE_LOCATION_SEARCH);
+            Query query = entityManager.createNativeQuery(builder.toString(), ResultSetName.SE_UNIT_SEARCH);
             SQLHelper.setParams(query, params);
-            List<SELocationDTO> items = query.getResultList();
+            List<SEUnitDTO> items = query.getResultList();
             result.setItems(items);
         }
         return result;

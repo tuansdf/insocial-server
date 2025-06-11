@@ -1,0 +1,29 @@
+@id=
+@code=
+
+###
+
+GET {{base_url}}/v1/se/units/search
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/se/units/{{id}}
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/se/units/code/{{code}}
+Authorization: Bearer {{access_token}}
+
+###
+
+PUT {{base_url}}/v1/se/units
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "code": "",
+  "name": "",
+  "seasonId": ""
+}
