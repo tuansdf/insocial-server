@@ -3,28 +3,29 @@
 
 ###
 
-GET {{base_url}}/v1/se/locations/search
+GET {{base_url}}/v1/se/seasons/search
 Authorization: Bearer {{access_token}}
 
 ###
 
-GET {{base_url}}/v1/se/locations/{{id}}
+GET {{base_url}}/v1/se/seasons/{{id}}
 Authorization: Bearer {{access_token}}
 
 ###
 
-GET {{base_url}}/v1/se/locations/code/{{code}}
+GET {{base_url}}/v1/se/seasons/code/{{code}}
 Authorization: Bearer {{access_token}}
 
 ###
 
-PUT {{base_url}}/v1/se/locations
+PUT {{base_url}}/v1/se/seasons
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
   "code": "",
   "name": "",
-  "address": "",
-  "seasonId": ""
+  "year": 0,
+  "startTime": 0,
+  "endTime": 0
 }
