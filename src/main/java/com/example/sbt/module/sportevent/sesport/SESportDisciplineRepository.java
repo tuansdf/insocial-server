@@ -1,4 +1,4 @@
-package com.example.sbt.module.sportevent.sesportdiscipline;
+package com.example.sbt.module.sportevent.sesport;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

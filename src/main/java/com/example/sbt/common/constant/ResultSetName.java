@@ -12,5 +12,6 @@ public class ResultSetName {
     public static final String SE_LOCATION_SEARCH = "SE_LOCATION_SEARCH";
     public static final String SE_SEASON_SEARCH = "SE_SEASON_SEARCH";
     public static final String SE_UNIT_SEARCH = "SE_UNIT_SEARCH";
+    public static final String SE_REGION_SEARCH = "SE_REGION_SEARCH";
 
 }

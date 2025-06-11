@@ -1,4 +1,4 @@
-package com.example.sbt.module.sportevent.sesportdiscipline;
+package com.example.sbt.module.sportevent.sesport;
 
 import com.example.sbt.common.entity.BaseEntity;
 import jakarta.persistence.*;

@@ -7,4 +7,7 @@ import java.util.UUID;
 
 @Repository
 public interface SERegionRepository extends JpaRepository<SERegion, UUID> {
+
+    boolean existsByCode(String code);
+
 }

@@ -1,0 +1,29 @@
+@id=
+@code=
+
+###
+
+GET {{base_url}}/v1/se/regions/search
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/se/regions/{{id}}
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/se/regions/code/{{code}}
+Authorization: Bearer {{access_token}}
+
+###
+
+PUT {{base_url}}/v1/se/regions
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "code": "",
+  "name": "",
+  "seasonId": ""
+}
