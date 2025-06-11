@@ -15,6 +15,8 @@ import com.example.sbt.module.permission.Permission;
 import com.example.sbt.module.permission.dto.PermissionDTO;
 import com.example.sbt.module.role.dto.RoleDTO;
 import com.example.sbt.module.role.entity.Role;
+import com.example.sbt.module.sportevent.selocation.SELocation;
+import com.example.sbt.module.sportevent.selocation.dto.SELocationDTO;
 import com.example.sbt.module.token.Token;
 import com.example.sbt.module.token.dto.TokenDTO;
 import com.example.sbt.module.user.dto.UserDTO;
@@ -86,5 +88,9 @@ public interface CommonMapper {
     FileObjectDTO toDTO(FileObject v);
 
     FileObject toEntity(FileObjectDTO v);
+
+    SELocationDTO toDTO(SELocation v);
+
+    SELocation toEntity(SELocationDTO v);
 
 }

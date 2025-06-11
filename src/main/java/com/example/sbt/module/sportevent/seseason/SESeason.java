@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
@@ -27,5 +29,11 @@ public class SESeason extends BaseEntity {
     private String code;
     @Column(name = "name")
     private String name;
+    @Column(name = "year")
+    private Integer year;
+    @Column(name = "start_time")
+    private Instant startTime;
+    @Column(name = "end_time")
+    private Instant endTime;
 
 }

@@ -1,0 +1,24 @@
+@id=
+
+###
+
+GET {{base_url}}/v1/se/locations/search
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/se/locations/{{id}}
+Authorization: Bearer {{access_token}}
+
+###
+
+PUT {{base_url}}/v1/se/locations
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "code": "",
+  "name": "",
+  "address": "",
+  "seasonId": ""
+}
