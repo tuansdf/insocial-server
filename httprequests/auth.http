@@ -1,0 +1,122 @@
+@username=
+@email=
+@password=
+@otp_code=
+@activate_token=
+@reset_token=
+
+###
+
+POST {{base_url}}/pub/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}",
+  "otpCode": "{{otp_code}}"
+}
+
+###
+
+POST {{base_url}}/pub/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+###
+
+POST {{base_url}}/pub/v1/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+
+###
+
+POST {{base_url}}/pub/v1/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "{{reset_token}}",
+  "newPassword": "{{password}}"
+}
+
+###
+
+POST {{base_url}}/pub/v1/auth/token/refresh
+Content-Type: application/json
+
+{
+  "token": "{{refresh_token}}"
+}
+
+###
+
+GET {{base_url}}/pub/v1/auth/account/activate?token={{activate_token}}
+
+###
+
+POST {{base_url}}/pub/v1/auth/account/request-activate
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+
+###
+
+PATCH {{base_url}}/v1/auth/password
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "oldPassword": "{{password}}",
+  "newPassword": "{{password}}"
+}
+
+###
+
+GET {{base_url}}/v1/auth/token/verify
+Authorization: Bearer {{access_token}}
+
+###
+
+POST {{base_url}}/v1/auth/token/revoke
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+###
+
+POST {{base_url}}/v1/auth/2fa/enable
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "password": "{{password}}"
+}
+
+###
+
+POST {{base_url}}/v1/auth/2fa/confirm
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "otpCode": "{{otp_code}}"
+}
+
+###
+
+POST {{base_url}}/v1/auth/2fa/disable
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "password": "{{password}}",
+  "otpCode": "{{otp_code}}"
+}

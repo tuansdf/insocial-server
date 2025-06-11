@@ -1,0 +1,49 @@
+@id=
+@username=
+@name=
+@email=
+@status=
+@role_id=
+
+###
+
+GET {{base_url}}/v1/users/me
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/users/{{id}}
+Authorization: Bearer {{access_token}}
+
+###
+
+PATCH {{base_url}}/v1/users/me
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "email": "{{email}}",
+  "name": "{{name}}",
+  "status": "{{status}}",
+  "roleIds": ["{{role_id}}"]
+}
+
+###
+
+PATCH {{base_url}}/v1/users/{{id}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "email": "{{email}}",
+  "name": "{{name}}",
+  "status": "{{status}}",
+  "roleIds": ["{{role_id}}"]
+}
+
+###
+
+GET {{base_url}}/v1/users/search?count=true
+Authorization: Bearer {{access_token}}
