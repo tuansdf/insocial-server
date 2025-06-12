@@ -69,7 +69,8 @@ public class SELocationServiceImpl implements SELocationService {
     @Override
     public SELocationDTO findOneById(UUID id) {
         if (id == null) return null;
-        List<SELocationDTO> result = executeSearch(SearchSELocationRequestDTO.builder().id(id).build(), false).getItems();
+        List<SELocationDTO> result = executeSearch(SearchSELocationRequestDTO.builder()
+                .id(id).pageNumber(1L).pageSize(1L).build(), false).getItems();
         if (CollectionUtils.isEmpty(result)) return null;
         return result.getFirst();
     }
@@ -86,7 +87,8 @@ public class SELocationServiceImpl implements SELocationService {
     @Override
     public SELocationDTO findOneByCode(String code) {
         if (code == null) return null;
-        List<SELocationDTO> result = executeSearch(SearchSELocationRequestDTO.builder().code(code).build(), false).getItems();
+        List<SELocationDTO> result = executeSearch(SearchSELocationRequestDTO.builder()
+                .code(code).pageNumber(1L).pageSize(1L).build(), false).getItems();
         if (CollectionUtils.isEmpty(result)) return null;
         return result.getFirst();
     }

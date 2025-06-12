@@ -25,6 +25,9 @@ public class SESeasonValidator {
         if (requestDTO.getEndTime() == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
+        if (requestDTO.getEndTime().isBefore(requestDTO.getStartTime())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public void validateCreate(SESeasonDTO requestDTO) {

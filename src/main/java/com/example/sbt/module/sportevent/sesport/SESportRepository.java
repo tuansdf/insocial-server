@@ -7,4 +7,7 @@ import java.util.UUID;
 
 @Repository
 public interface SESportRepository extends JpaRepository<SESport, UUID> {
+
+    boolean existsByCode(String code);
+
 }

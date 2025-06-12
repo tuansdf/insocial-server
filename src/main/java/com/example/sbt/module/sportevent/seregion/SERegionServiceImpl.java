@@ -68,7 +68,8 @@ public class SERegionServiceImpl implements SERegionService {
     @Override
     public SERegionDTO findOneById(UUID id) {
         if (id == null) return null;
-        List<SERegionDTO> result = executeSearch(SearchSERegionRequestDTO.builder().id(id).build(), false).getItems();
+        List<SERegionDTO> result = executeSearch(SearchSERegionRequestDTO.builder()
+                .id(id).pageNumber(1L).pageSize(1L).build(), false).getItems();
         if (CollectionUtils.isEmpty(result)) return null;
         return result.getFirst();
     }
@@ -85,7 +86,8 @@ public class SERegionServiceImpl implements SERegionService {
     @Override
     public SERegionDTO findOneByCode(String code) {
         if (code == null) return null;
-        List<SERegionDTO> result = executeSearch(SearchSERegionRequestDTO.builder().code(code).build(), false).getItems();
+        List<SERegionDTO> result = executeSearch(SearchSERegionRequestDTO.builder()
+                .code(code).pageNumber(1L).pageSize(1L).build(), false).getItems();
         if (CollectionUtils.isEmpty(result)) return null;
         return result.getFirst();
     }
