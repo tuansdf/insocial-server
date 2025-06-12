@@ -40,12 +40,14 @@ public class SESportCategoryServiceImpl implements SESportCategoryService {
         if (requestDTO == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
+        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
+        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
+        requestDTO.setRule(ConversionUtils.safeTrim(requestDTO.getRule()));
         SESportCategory result = null;
         if (requestDTO.getId() != null) {
             result = seSportCategoryRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
-            requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
             seSportCategoryValidator.validateCreate(requestDTO);
             if (seSportCategoryRepository.existsByCode(requestDTO.getCode())) {
                 throw new CustomException(HttpStatus.BAD_REQUEST);
@@ -117,7 +119,7 @@ public class SESportCategoryServiceImpl implements SESportCategoryService {
         if (isCount) {
             builder.append(" select count(*) ");
         } else {
-            builder.append(" select sc.id, sc.sport_id, ss.code as sport_code, sc.code, sc.name, sc.created_at, sc.updated_at, ");
+            builder.append(" select sc.id, sc.sport_id, s.code as sport_code, ss.id as season_id, ss.code as season_code, sc.code, sc.name, sc.created_at, sc.updated_at, ");
             if (Boolean.TRUE.equals(requestDTO.getIsDetail())) {
                 builder.append(" sc.rule ");
             } else {
@@ -125,13 +127,26 @@ public class SESportCategoryServiceImpl implements SESportCategoryService {
             }
         }
         builder.append(" from se_sport_category sc ");
-        builder.append(" left join se_sport ss on (sc.sport_id = ss.id) ");
+        builder.append(" left join se_sport s on (s.id = sc.sport_id) ");
+        builder.append(" left join se_season ss on (ss.id = s.season_id) ");
         builder.append(" where 1=1 ");
         if (requestDTO.getSportId() != null) {
             builder.append(" and sc.sport_id = :sportId ");
             params.put("sportId", requestDTO.getSportId());
         }
-        if (StringUtils.isNotEmpty(requestDTO.getCode())) {
+        if (requestDTO.getSeasonId() != null) {
+            builder.append(" and sc.season_id = :seasonId ");
+            params.put("seasonId", requestDTO.getSeasonId());
+        }
+        if (StringUtils.isNotBlank(requestDTO.getSportCode())) {
+            builder.append(" and s.code = :sportCode ");
+            params.put("sportCode", requestDTO.getSportCode());
+        }
+        if (StringUtils.isNotBlank(requestDTO.getSeasonCode())) {
+            builder.append(" and ss.code = :seasonCode ");
+            params.put("seasonCode", requestDTO.getSeasonCode());
+        }
+        if (StringUtils.isNotBlank(requestDTO.getCode())) {
             builder.append(" and sc.code = :code ");
             params.put("code", requestDTO.getCode());
         }

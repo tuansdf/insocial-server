@@ -62,6 +62,7 @@ public class SESportController {
             @RequestParam(required = false) Long pageNumber,
             @RequestParam(required = false) Long pageSize,
             @RequestParam(required = false) UUID sportId,
+            @RequestParam(required = false) String seasonCode,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) Instant createdAtFrom,
             @RequestParam(required = false) Instant createdAtTo,
@@ -71,6 +72,7 @@ public class SESportController {
                     .pageNumber(pageNumber)
                     .pageSize(pageSize)
                     .seasonId(sportId)
+                    .seasonCode(seasonCode)
                     .code(code)
                     .createdAtTo(createdAtTo)
                     .createdAtFrom(createdAtFrom)
@@ -118,6 +120,9 @@ public class SESportController {
             @RequestParam(required = false) Long pageNumber,
             @RequestParam(required = false) Long pageSize,
             @RequestParam(required = false) UUID sportId,
+            @RequestParam(required = false) UUID seasonId,
+            @RequestParam(required = false) String sportCode,
+            @RequestParam(required = false) String seasonCode,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) Instant createdAtFrom,
             @RequestParam(required = false) Instant createdAtTo,
@@ -127,6 +132,9 @@ public class SESportController {
                     .pageNumber(pageNumber)
                     .pageSize(pageSize)
                     .sportId(sportId)
+                    .seasonId(seasonId)
+                    .sportCode(sportCode)
+                    .seasonCode(seasonCode)
                     .code(code)
                     .createdAtTo(createdAtTo)
                     .createdAtFrom(createdAtFrom)

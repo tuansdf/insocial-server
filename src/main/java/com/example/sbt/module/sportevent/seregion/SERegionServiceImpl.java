@@ -41,12 +41,13 @@ public class SERegionServiceImpl implements SERegionService {
         if (requestDTO == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
+        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
+        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
         SERegion result = null;
         if (requestDTO.getId() != null) {
             result = seRegionRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
-            requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
             seRegionValidator.validateCreate(requestDTO);
             if (seRegionRepository.existsByCode(requestDTO.getCode())) {
                 throw new CustomException(HttpStatus.BAD_REQUEST);
@@ -117,16 +118,20 @@ public class SERegionServiceImpl implements SERegionService {
         if (isCount) {
             builder.append(" select count(*) ");
         } else {
-            builder.append(" select r.id, r.season_id, s.code as season_code, r.code, r.name, r.created_at, r.updated_at ");
+            builder.append(" select r.id, r.season_id, ss.code as season_code, r.code, r.name, r.created_at, r.updated_at ");
         }
         builder.append(" from se_region r ");
-        builder.append(" left join se_season s on (r.season_id = s.id) ");
+        builder.append(" left join se_season ss on (ss.id = r.season_id) ");
         builder.append(" where 1=1 ");
         if (requestDTO.getSeasonId() != null) {
             builder.append(" and r.season_id = :seasonId ");
             params.put("seasonId", requestDTO.getSeasonId());
         }
-        if (StringUtils.isNotEmpty(requestDTO.getCode())) {
+        if (StringUtils.isNotBlank(requestDTO.getSeasonCode())) {
+            builder.append(" and ss.code = :seasonCode ");
+            params.put("seasonCode", requestDTO.getSeasonCode());
+        }
+        if (StringUtils.isNotBlank(requestDTO.getCode())) {
             builder.append(" and r.code = :code ");
             params.put("code", requestDTO.getCode());
         }

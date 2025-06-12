@@ -59,6 +59,7 @@ public class SEUnitController {
             @RequestParam(required = false) Long pageNumber,
             @RequestParam(required = false) Long pageSize,
             @RequestParam(required = false) UUID seasonId,
+            @RequestParam(required = false) String seasonCode,
             @RequestParam(required = false) String code,
             @RequestParam(required = false) Instant createdAtFrom,
             @RequestParam(required = false) Instant createdAtTo,
@@ -68,6 +69,7 @@ public class SEUnitController {
                     .pageNumber(pageNumber)
                     .pageSize(pageSize)
                     .seasonId(seasonId)
+                    .seasonCode(seasonCode)
                     .code(code)
                     .createdAtTo(createdAtTo)
                     .createdAtFrom(createdAtFrom)

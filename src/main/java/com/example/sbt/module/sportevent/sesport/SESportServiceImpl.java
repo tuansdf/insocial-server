@@ -41,12 +41,13 @@ public class SESportServiceImpl implements SESportService {
         if (requestDTO == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
+        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
+        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
         SESport result = null;
         if (requestDTO.getId() != null) {
             result = seSportRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
-            requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
             seSportValidator.validateCreate(requestDTO);
             if (seSportRepository.existsByCode(requestDTO.getCode())) {
                 throw new CustomException(HttpStatus.BAD_REQUEST);
@@ -120,13 +121,17 @@ public class SESportServiceImpl implements SESportService {
             builder.append(" select s.id, s.season_id, ss.code as season_code, s.code, s.name, s.created_at, s.updated_at ");
         }
         builder.append(" from se_sport s ");
-        builder.append(" left join se_season ss on (s.season_id = ss.id) ");
+        builder.append(" left join se_season ss on (ss.id = s.season_id) ");
         builder.append(" where 1=1 ");
         if (requestDTO.getSeasonId() != null) {
             builder.append(" and s.season_id = :seasonId ");
             params.put("seasonId", requestDTO.getSeasonId());
         }
-        if (StringUtils.isNotEmpty(requestDTO.getCode())) {
+        if (StringUtils.isNotBlank(requestDTO.getSeasonCode())) {
+            builder.append(" and ss.code = :seasonCode ");
+            params.put("seasonCode", requestDTO.getSeasonCode());
+        }
+        if (StringUtils.isNotBlank(requestDTO.getCode())) {
             builder.append(" and s.code = :code ");
             params.put("code", requestDTO.getCode());
         }

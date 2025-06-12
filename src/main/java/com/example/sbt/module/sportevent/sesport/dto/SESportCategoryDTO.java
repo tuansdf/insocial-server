@@ -17,6 +17,8 @@ public class SESportCategoryDTO {
     private UUID id;
     private UUID sportId;
     private String sportCode;
+    private UUID seasonId;
+    private String seasonCode;
     private String code;
     private String name;
     private String rule;

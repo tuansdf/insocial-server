@@ -39,12 +39,13 @@ public class SESeasonServiceImpl implements SESeasonService {
         if (requestDTO == null) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
+        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
+        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
         SESeason result = null;
         if (requestDTO.getId() != null) {
             result = seSeasonRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
-            requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
             seSeasonValidator.validateCreate(requestDTO);
             if (seSeasonRepository.existsByCode(requestDTO.getCode())) {
                 throw new CustomException(HttpStatus.BAD_REQUEST);
@@ -114,7 +115,7 @@ public class SESeasonServiceImpl implements SESeasonService {
         }
         builder.append(" from se_season s ");
         builder.append(" where 1=1 ");
-        if (StringUtils.isNotEmpty(requestDTO.getCode())) {
+        if (StringUtils.isNotBlank(requestDTO.getCode())) {
             builder.append(" and s.code = :code ");
             params.put("code", requestDTO.getCode());
         }

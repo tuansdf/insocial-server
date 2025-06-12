@@ -32,6 +32,8 @@ import java.util.UUID;
                 @ColumnResult(name = "id", type = UUID.class),
                 @ColumnResult(name = "sport_id", type = UUID.class),
                 @ColumnResult(name = "sport_code", type = String.class),
+                @ColumnResult(name = "season_id", type = UUID.class),
+                @ColumnResult(name = "season_code", type = String.class),
                 @ColumnResult(name = "code", type = String.class),
                 @ColumnResult(name = "name", type = String.class),
                 @ColumnResult(name = "rule", type = String.class),

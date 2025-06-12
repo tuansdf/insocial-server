@@ -18,6 +18,9 @@ public class SearchSESportCategoryRequestDTO {
     private Long pageSize;
     private UUID id;
     private UUID sportId;
+    private String sportCode;
+    private UUID seasonId;
+    private String seasonCode;
     private String code;
     private Instant createdAtFrom;
     private Instant createdAtTo;
