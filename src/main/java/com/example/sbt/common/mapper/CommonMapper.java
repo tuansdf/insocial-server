@@ -22,6 +22,8 @@ import com.example.sbt.module.sportevent.seregion.dto.SERegionDTO;
 import com.example.sbt.module.sportevent.seseason.SESeason;
 import com.example.sbt.module.sportevent.seseason.dto.SESeasonDTO;
 import com.example.sbt.module.sportevent.sesport.SESport;
+import com.example.sbt.module.sportevent.sesport.SESportCategory;
+import com.example.sbt.module.sportevent.sesport.dto.SESportCategoryDTO;
 import com.example.sbt.module.sportevent.sesport.dto.SESportDTO;
 import com.example.sbt.module.sportevent.seunit.SEUnit;
 import com.example.sbt.module.sportevent.seunit.dto.SEUnitDTO;
@@ -116,5 +118,9 @@ public interface CommonMapper {
     SESportDTO toDTO(SESport v);
 
     SESport toEntity(SESportDTO v);
+
+    SESportCategoryDTO toDTO(SESportCategory v);
+
+    SESportCategory toEntity(SESportCategoryDTO v);
 
 }

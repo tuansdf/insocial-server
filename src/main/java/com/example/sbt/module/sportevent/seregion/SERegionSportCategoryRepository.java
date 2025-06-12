@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface SERegionSportDisciplineRepository extends JpaRepository<SERegionSportDiscipline, UUID> {
+public interface SERegionSportCategoryRepository extends JpaRepository<SERegionSportCategory, UUID> {
 }

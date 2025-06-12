@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface SESportDisciplineRepository extends JpaRepository<SESportDiscipline, UUID> {
+public interface SESportCategoryRepository extends JpaRepository<SESportCategory, UUID> {
+
+    boolean existsByCode(String code);
+
 }
