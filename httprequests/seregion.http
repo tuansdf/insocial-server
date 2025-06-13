@@ -23,7 +23,7 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
 {
-  "code": "",
-  "name": "",
-  "seasonId": ""
+  "code": "Region1",
+  "name": "Region1",
+  "seasonId": "01976221-1cdc-77ec-a691-1fa784c016cc"
 }

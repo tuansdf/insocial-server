@@ -8,7 +8,6 @@ import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.SQLHelper;
 import com.example.sbt.module.sportevent.selocation.dto.SELocationDTO;
 import com.example.sbt.module.sportevent.selocation.dto.SearchSELocationRequestDTO;
-import com.example.sbt.module.sportevent.seseason.SESeasonRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -32,35 +31,22 @@ public class SELocationServiceImpl implements SELocationService {
 
     private final CommonMapper commonMapper;
     private final SELocationRepository seLocationRepository;
-    private final SESeasonRepository seSeasonRepository;
     private final SELocationValidator seLocationValidator;
     private final EntityManager entityManager;
 
     @Override
     public SELocationDTO save(SELocationDTO requestDTO) {
-        if (requestDTO == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST);
-        }
-        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
-        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
-        requestDTO.setAddress(ConversionUtils.safeTrim(requestDTO.getAddress()));
+        seLocationValidator.cleanRequest(requestDTO);
+        seLocationValidator.validateUpdate(requestDTO);
         SELocation result = null;
         if (requestDTO.getId() != null) {
             result = seLocationRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
             seLocationValidator.validateCreate(requestDTO);
-            if (seLocationRepository.existsByCode(requestDTO.getCode())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
-            if (!seSeasonRepository.existsById(requestDTO.getSeasonId())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
             result = new SELocation();
             result.setCode(requestDTO.getCode());
             result.setSeasonId(requestDTO.getSeasonId());
-        } else {
-            seLocationValidator.validateUpdate(requestDTO);
         }
         result.setName(requestDTO.getName());
         result.setAddress(requestDTO.getAddress());
@@ -123,7 +109,7 @@ public class SELocationServiceImpl implements SELocationService {
             builder.append(" select l.id, l.season_id, ss.code as season_code, l.code, l.name, l.address, l.created_at, l.updated_at ");
         }
         builder.append(" from se_location l ");
-        builder.append(" left join se_season s on (ss.id = l.season_id) ");
+        builder.append(" left join se_season ss on (ss.id = l.season_id) ");
         builder.append(" where 1=1 ");
         if (requestDTO.getSeasonId() != null) {
             builder.append(" and l.season_id = :seasonId ");

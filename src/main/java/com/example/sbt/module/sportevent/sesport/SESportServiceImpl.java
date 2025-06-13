@@ -6,7 +6,6 @@ import com.example.sbt.common.exception.CustomException;
 import com.example.sbt.common.mapper.CommonMapper;
 import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.SQLHelper;
-import com.example.sbt.module.sportevent.seseason.SESeasonRepository;
 import com.example.sbt.module.sportevent.sesport.dto.SESportDTO;
 import com.example.sbt.module.sportevent.sesport.dto.SearchSESportRequestDTO;
 import jakarta.persistence.EntityManager;
@@ -32,34 +31,22 @@ public class SESportServiceImpl implements SESportService {
 
     private final CommonMapper commonMapper;
     private final SESportRepository seSportRepository;
-    private final SESeasonRepository seSeasonRepository;
     private final SESportValidator seSportValidator;
     private final EntityManager entityManager;
 
     @Override
     public SESportDTO save(SESportDTO requestDTO) {
-        if (requestDTO == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST);
-        }
-        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
-        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
+        seSportValidator.cleanRequest(requestDTO);
+        seSportValidator.validateUpdate(requestDTO);
         SESport result = null;
         if (requestDTO.getId() != null) {
             result = seSportRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
             seSportValidator.validateCreate(requestDTO);
-            if (seSportRepository.existsByCode(requestDTO.getCode())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
-            if (!seSeasonRepository.existsById(requestDTO.getSeasonId())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
             result = new SESport();
             result.setCode(requestDTO.getCode());
             result.setSeasonId(requestDTO.getSeasonId());
-        } else {
-            seSportValidator.validateUpdate(requestDTO);
         }
         result.setName(requestDTO.getName());
         result = seSportRepository.save(result);

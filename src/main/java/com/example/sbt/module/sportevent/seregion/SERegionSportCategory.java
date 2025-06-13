@@ -20,7 +20,7 @@ import java.util.UUID;
                 @UniqueConstraint(name = "se_region_sport_category_code_idx", columnNames = "code"),
         },
         indexes = {
-                @Index(name = "se_region_sport_category_comp_id_idx", columnList = "region_id, sport_category_id"),
+                @Index(name = "se_region_sport_category_rel_idx", columnList = "region_id, sport_category_id"),
                 @Index(name = "se_region_sport_category_created_at_idx", columnList = "created_at"),
         }
 )

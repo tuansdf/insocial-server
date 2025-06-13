@@ -8,7 +8,6 @@ import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.SQLHelper;
 import com.example.sbt.module.sportevent.seregion.dto.SERegionDTO;
 import com.example.sbt.module.sportevent.seregion.dto.SearchSERegionRequestDTO;
-import com.example.sbt.module.sportevent.seseason.SESeasonRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
@@ -32,34 +31,22 @@ public class SERegionServiceImpl implements SERegionService {
 
     private final CommonMapper commonMapper;
     private final SERegionRepository seRegionRepository;
-    private final SESeasonRepository seSeasonRepository;
     private final SERegionValidator seRegionValidator;
     private final EntityManager entityManager;
 
     @Override
     public SERegionDTO save(SERegionDTO requestDTO) {
-        if (requestDTO == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST);
-        }
-        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
-        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
+        seRegionValidator.cleanRequest(requestDTO);
+        seRegionValidator.validateUpdate(requestDTO);
         SERegion result = null;
         if (requestDTO.getId() != null) {
             result = seRegionRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
             seRegionValidator.validateCreate(requestDTO);
-            if (seRegionRepository.existsByCode(requestDTO.getCode())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
-            if (!seSeasonRepository.existsById(requestDTO.getSeasonId())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
             result = new SERegion();
             result.setCode(requestDTO.getCode());
             result.setSeasonId(requestDTO.getSeasonId());
-        } else {
-            seRegionValidator.validateUpdate(requestDTO);
         }
         result.setName(requestDTO.getName());
         result = seRegionRepository.save(result);

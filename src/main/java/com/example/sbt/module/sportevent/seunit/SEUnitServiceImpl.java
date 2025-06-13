@@ -6,7 +6,6 @@ import com.example.sbt.common.exception.CustomException;
 import com.example.sbt.common.mapper.CommonMapper;
 import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.SQLHelper;
-import com.example.sbt.module.sportevent.seseason.SESeasonRepository;
 import com.example.sbt.module.sportevent.seunit.dto.SEUnitDTO;
 import com.example.sbt.module.sportevent.seunit.dto.SearchSEUnitRequestDTO;
 import jakarta.persistence.EntityManager;
@@ -32,34 +31,22 @@ public class SEUnitServiceImpl implements SEUnitService {
 
     private final CommonMapper commonMapper;
     private final SEUnitRepository seUnitRepository;
-    private final SESeasonRepository seSeasonRepository;
     private final SEUnitValidator seUnitValidator;
     private final EntityManager entityManager;
 
     @Override
     public SEUnitDTO save(SEUnitDTO requestDTO) {
-        if (requestDTO == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST);
-        }
-        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
-        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
+        seUnitValidator.cleanRequest(requestDTO);
+        seUnitValidator.validateUpdate(requestDTO);
         SEUnit result = null;
         if (requestDTO.getId() != null) {
             result = seUnitRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
             seUnitValidator.validateCreate(requestDTO);
-            if (seUnitRepository.existsByCode(requestDTO.getCode())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
-            if (!seSeasonRepository.existsById(requestDTO.getSeasonId())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
             result = new SEUnit();
             result.setCode(requestDTO.getCode());
             result.setSeasonId(requestDTO.getSeasonId());
-        } else {
-            seUnitValidator.validateUpdate(requestDTO);
         }
         result.setName(requestDTO.getName());
         result = seUnitRepository.save(result);

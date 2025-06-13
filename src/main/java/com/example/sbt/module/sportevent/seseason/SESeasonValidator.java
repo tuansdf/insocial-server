@@ -1,6 +1,7 @@
 package com.example.sbt.module.sportevent.seseason;
 
 import com.example.sbt.common.exception.CustomException;
+import com.example.sbt.common.util.ConversionUtils;
 import com.example.sbt.common.util.ValidationUtils;
 import com.example.sbt.module.sportevent.seseason.dto.SESeasonDTO;
 import lombok.RequiredArgsConstructor;
@@ -8,11 +9,26 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.temporal.ChronoUnit;
+
 @RequiredArgsConstructor
 @Component
 public class SESeasonValidator {
 
+    private final SESeasonRepository seSeasonRepository;
+
+    public void cleanRequest(SESeasonDTO requestDTO) {
+        if (requestDTO == null) return;
+        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
+        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
+        requestDTO.setStartTime(requestDTO.getStartTime().truncatedTo(ChronoUnit.SECONDS));
+        requestDTO.setEndTime(requestDTO.getEndTime().truncatedTo(ChronoUnit.SECONDS));
+    }
+
     public void validateUpdate(SESeasonDTO requestDTO) {
+        if (requestDTO == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
         if (StringUtils.isEmpty(requestDTO.getName())) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
@@ -31,6 +47,9 @@ public class SESeasonValidator {
     }
 
     public void validateCreate(SESeasonDTO requestDTO) {
+        if (requestDTO == null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
         if (StringUtils.isBlank(requestDTO.getCode())) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
@@ -44,7 +63,9 @@ public class SESeasonValidator {
         if (requestDTO.getYear() <= 0) {
             throw new CustomException(HttpStatus.BAD_REQUEST);
         }
-        validateUpdate(requestDTO);
+        if (seSeasonRepository.existsByCode(requestDTO.getCode())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

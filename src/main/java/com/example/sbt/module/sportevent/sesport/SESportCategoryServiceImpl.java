@@ -37,29 +37,17 @@ public class SESportCategoryServiceImpl implements SESportCategoryService {
 
     @Override
     public SESportCategoryDTO save(SESportCategoryDTO requestDTO) {
-        if (requestDTO == null) {
-            throw new CustomException(HttpStatus.BAD_REQUEST);
-        }
-        requestDTO.setCode(ConversionUtils.safeTrim(requestDTO.getCode()).toUpperCase());
-        requestDTO.setName(ConversionUtils.safeTrim(requestDTO.getName()));
-        requestDTO.setRule(ConversionUtils.safeTrim(requestDTO.getRule()));
+        seSportCategoryValidator.cleanRequest(requestDTO);
+        seSportCategoryValidator.validateUpdate(requestDTO);
         SESportCategory result = null;
         if (requestDTO.getId() != null) {
             result = seSportCategoryRepository.findById(requestDTO.getId()).orElse(null);
         }
         if (result == null) {
             seSportCategoryValidator.validateCreate(requestDTO);
-            if (seSportCategoryRepository.existsByCode(requestDTO.getCode())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
-            if (!seSportRepository.existsById(requestDTO.getSportId())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST);
-            }
             result = new SESportCategory();
             result.setCode(requestDTO.getCode());
             result.setSportId(requestDTO.getSportId());
-        } else {
-            seSportCategoryValidator.validateUpdate(requestDTO);
         }
         result.setName(requestDTO.getName());
         result.setRule(requestDTO.getRule());
