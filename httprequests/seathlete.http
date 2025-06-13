@@ -1,0 +1,12 @@
+@id=
+@code=
+
+###
+
+GET {{base_url}}/v1/se/athletes/me?seasonId=
+Authorization: Bearer {{access_token}}
+
+###
+
+GET {{base_url}}/v1/se/athletes/search
+Authorization: Bearer {{access_token}}
