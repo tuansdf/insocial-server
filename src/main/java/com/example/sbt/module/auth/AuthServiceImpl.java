@@ -124,15 +124,15 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException(HttpStatus.UNAUTHORIZED);
         }
 
-        boolean isUserExisted = userService.existsByUsernameOrEmail(requestDTO.getUsername(), requestDTO.getEmail());
+        boolean isUserExisted = userRepository.existsByUsernameOrEmail(requestDTO.getUsername(), requestDTO.getEmail());
         if (isUserExisted) {
             throw new CustomException(HttpStatus.CONFLICT);
         }
 
         String hashedPassword = passwordEncoder.encode(requestDTO.getPassword());
         User user = new User();
-        user.setUsername(ConversionUtils.safeToString(requestDTO.getUsername()).trim());
-        user.setEmail(ConversionUtils.safeToString(requestDTO.getEmail()).trim());
+        user.setUsername(requestDTO.getUsername());
+        user.setEmail(requestDTO.getEmail());
         user.setPassword(hashedPassword);
         user.setName(requestDTO.getName());
         user.setStatus(CommonStatus.PENDING);

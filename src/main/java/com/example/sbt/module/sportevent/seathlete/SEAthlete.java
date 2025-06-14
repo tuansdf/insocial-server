@@ -20,10 +20,9 @@ import java.util.UUID;
 @Table(
         name = "se_athlete",
         uniqueConstraints = {
-                @UniqueConstraint(name = "se_athlete_code_idx", columnNames = "code"),
+                @UniqueConstraint(name = "se_athlete_rel_idx", columnNames = {"season_id", "user_id"}),
         },
         indexes = {
-                @Index(name = "se_athlete_comp_season_id_user_id_idx", columnList = "season_id, user_id"),
                 @Index(name = "se_athlete_user_id_idx", columnList = "user_id"),
                 @Index(name = "se_athlete_region_id_idx", columnList = "region_id"),
                 @Index(name = "se_athlete_unit_id_idx", columnList = "unit_id"),

@@ -15,20 +15,6 @@ import com.example.sbt.module.permission.Permission;
 import com.example.sbt.module.permission.dto.PermissionDTO;
 import com.example.sbt.module.role.dto.RoleDTO;
 import com.example.sbt.module.role.entity.Role;
-import com.example.sbt.module.sportevent.seathlete.SEAthlete;
-import com.example.sbt.module.sportevent.selocation.SELocation;
-import com.example.sbt.module.sportevent.selocation.dto.SELocationDTO;
-import com.example.sbt.module.sportevent.seathlete.dto.SEAthleteDTO;
-import com.example.sbt.module.sportevent.seregion.SERegion;
-import com.example.sbt.module.sportevent.seregion.dto.SERegionDTO;
-import com.example.sbt.module.sportevent.seseason.SESeason;
-import com.example.sbt.module.sportevent.seseason.dto.SESeasonDTO;
-import com.example.sbt.module.sportevent.sesport.SESport;
-import com.example.sbt.module.sportevent.sesport.SESportCategory;
-import com.example.sbt.module.sportevent.sesport.dto.SESportCategoryDTO;
-import com.example.sbt.module.sportevent.sesport.dto.SESportDTO;
-import com.example.sbt.module.sportevent.seunit.SEUnit;
-import com.example.sbt.module.sportevent.seunit.dto.SEUnitDTO;
 import com.example.sbt.module.token.Token;
 import com.example.sbt.module.token.dto.TokenDTO;
 import com.example.sbt.module.user.dto.UserDTO;
@@ -100,33 +86,5 @@ public interface CommonMapper {
     FileObjectDTO toDTO(FileObject v);
 
     FileObject toEntity(FileObjectDTO v);
-
-    SELocationDTO toDTO(SELocation v);
-
-    SELocation toEntity(SELocationDTO v);
-
-    SESeasonDTO toDTO(SESeason v);
-
-    SESeason toEntity(SESeasonDTO v);
-
-    SEUnitDTO toDTO(SEUnit v);
-
-    SEUnit toEntity(SEUnitDTO v);
-
-    SERegionDTO toDTO(SERegion v);
-
-    SERegion toEntity(SERegionDTO v);
-
-    SESportDTO toDTO(SESport v);
-
-    SESport toEntity(SESportDTO v);
-
-    SESportCategoryDTO toDTO(SESportCategory v);
-
-    SESportCategory toEntity(SESportCategoryDTO v);
-
-    SEAthleteDTO toDTO(SEAthlete v);
-
-    SEAthlete toEntity(SEAthleteDTO v);
 
 }

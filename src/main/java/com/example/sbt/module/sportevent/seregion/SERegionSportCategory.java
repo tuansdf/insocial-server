@@ -17,10 +17,9 @@ import java.util.UUID;
 @Table(
         name = "se_region_sport_category",
         uniqueConstraints = {
-                @UniqueConstraint(name = "se_region_sport_category_code_idx", columnNames = "code"),
+                @UniqueConstraint(name = "se_region_sport_category_rel_idx", columnNames = {"region_id", "sport_category_id"}),
         },
         indexes = {
-                @Index(name = "se_region_sport_category_rel_idx", columnList = "region_id, sport_category_id"),
                 @Index(name = "se_region_sport_category_created_at_idx", columnList = "created_at"),
         }
 )
